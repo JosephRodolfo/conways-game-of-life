@@ -2,6 +2,7 @@ import { Component } from "../Component";
 import { coordParseReverse } from "../utils/coordParseReverse";
 import { isAlive } from "../utils/isAlive";
 import { conwayLogicHandler } from "../utils/conwayLogicHandler";
+import { checkNeighbors } from "../utils/checkNeighbors";
 
 export class Gridboard extends Component {
   constructor(type, id) {
@@ -53,26 +54,9 @@ export class Gridboard extends Component {
   };
 
   startGame = () => {
-    for (let c = 0; c < this.array.length; c++) {
-      for (let i = 0; i < this.array.length; i++) {
-        let numAlive =
-          isAlive(c - 1, i - 1, this.array) +
-          isAlive(c, i - 1, this.array) +
-          isAlive(c + 1, i - 1, this.array) +
-          isAlive(c - 1, i, this.array) +
-          isAlive(c + 1, i, this.array) +
-          isAlive(c - 1, i + 1, this.array) +
-          isAlive(c, i + 1, this.array) +
-          isAlive(c + 1, i + 1, this.array);
 
-        this.array[c][i] = conwayLogicHandler(
-          isAlive(c, i, this.array),
-          numAlive
-        );
-      }
-    }
-
-
+    const newArray = checkNeighbors(this.array, isAlive, conwayLogicHandler);
+    this.array.splice(0, this.array.length, ...newArray);
     this.drawBoard()
   };
 }
