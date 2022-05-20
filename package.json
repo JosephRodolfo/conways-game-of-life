@@ -6,17 +6,26 @@
   "scripts": {
     "build": "webpack",
     "serve": "webpack serve",
-    "start": "webpack serve --open"
+    "start": "webpack serve --open",
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "css-loader": "^6.7.1",
     "html-webpack-plugin": "^5.5.0",
+    "jest": "^28.1.0",
     "node-sass": "^7.0.1",
     "style-loader": "^3.3.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.18.0",
+    "babel-jest": "^28.1.0",
     "sass": "^1.51.0",
     "sass-loader": "^13.0.0",
     "webpack": "^5.72.1",

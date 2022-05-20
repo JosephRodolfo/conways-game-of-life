@@ -59,4 +59,9 @@ export class Gridboard extends Component {
     this.array.splice(0, this.array.length, ...newArray);
     this.drawBoard()
   };
+
+  resetGame = () => {
+    this.setBoardSize(5, 5);
+    this.drawBoard();
+    }
 }

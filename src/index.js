@@ -1,29 +1,29 @@
 import "./styles/styles.scss";
 import { Component } from "./Component";
 import { Gridboard } from "./modules/Gridboard";
+import { ControlPanel } from "./modules/ControlPanel";
 
 const gameController = (function () {
   let gridBoard = new Gridboard("div", "gridboard");
-  let startButton = new Component("button", "start-button", "Start");
-  let resetButton = new Component("button", "reset-button", "Reset");
+  let controlPanel = new ControlPanel("div", "control-panel")
 
   let isPaused = false;
   let interval = 500;
 
   const initializeGame = () => {
-    //initializes and draws board
-    gridBoard.setBoardSize(30, 30);
+    //initializes and draws board and initializes control panel
+    gridBoard.setBoardSize(5, 5);
     document.body.appendChild(gridBoard.render());
+    document.body.appendChild(controlPanel.render())
+    controlPanel.initializeButtons();
     gridBoard.initializeClickListeners(gridBoard.drawBoard);
     gridBoard.drawBoard();
 
-    //initalizes start button
-    document.body.appendChild(startButton.render());
+
+    //adds event lisenters to buttons
     let htmlStartButton = document.getElementById("start-button");
     htmlStartButton.addEventListener("click", startGame);
 
-    //initalizes reset button
-    document.body.appendChild(resetButton.render());
     let htmlResetButton = document.getElementById("reset-button");
     htmlResetButton.addEventListener("click", resetGame);
   };
@@ -43,15 +43,16 @@ const gameController = (function () {
       }
     }, interval);
   };
+  const resetGame = () => {
+    gridBoard.resetGame();
+
+  };
 
   return {
     initializeGame: initializeGame,
   };
 
-  const resetGame = () => {
 
-    
-  };
 })();
 
 gameController.initializeGame();

@@ -14,7 +14,6 @@ export const checkNeighbors = (array, isAlive, conwayLogicHandler) => {
             isAlive(c - 1, i + 1, array) +
             isAlive(c, i + 1, array) +
             isAlive(c + 1, i + 1, array);
-
             newArray[c][i] = conwayLogicHandler(
                 isAlive(c, i, array),
                 numAlive
