@@ -2,9 +2,17 @@ import "./styles/styles.scss";
 import { Component } from "./Component";
 import { Gridboard } from "./modules/Gridboard";
 
-let nav = new Component("nav", "nav");
 let gridBoard = new Gridboard("div", "gridboard");
+let startButton = new Component("button", "start-button", "Start");
 
-document.body.appendChild(nav.render());
-document.body.appendChild(gridBoard.render());
-gridBoard.drawBoard(10, 10);
+
+
+document.body.appendChild(startButton.render());
+
+gridBoard.setBoardSize(30, 30)
+document.body.appendChild(gridBoard.render())
+gridBoard.initializeClickListeners(gridBoard.drawBoard);
+gridBoard.drawBoard();
+
+let htmlStartButton = document.getElementById('start-button');
+htmlStartButton.addEventListener('click', gridBoard.startGame)
