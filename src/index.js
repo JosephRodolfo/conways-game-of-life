@@ -1,12 +1,10 @@
 import "./styles/styles.scss";
+import { Component } from "./Component";
+import { Gridboard } from "./modules/Gridboard";
 
+let nav = new Component("nav", "nav");
+let gridBoard = new Gridboard("div", "gridboard");
 
-function component() {
-  const element = document.createElement("div");
-
-  element.innerHTML = "Hello!";
-
-  return element;
-}
-
-document.body.appendChild(component());
+document.body.appendChild(nav.render());
+document.body.appendChild(gridBoard.render());
+gridBoard.drawBoard(10, 10);

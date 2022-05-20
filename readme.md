@@ -1,0 +1,3 @@
+# Conway's Game of Life
+
+This will be a recreation of Conway's Game of Life. (See https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life). It was created to practice some basic vanilla javascript skills, but I also wanted practice configuring and setting up webpack myself. I'm also making some basic components and rendering them on the page, as kind of a knock-off React with limited functionality. It uses HTML, SCSS, Weback, and Javascript.
