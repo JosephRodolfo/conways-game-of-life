@@ -31,6 +31,5 @@ export const checkNumNeighbors = (c, i, array) => {
         isAlive(c, i + 1, array) +
         isAlive(c + 1, i + 1, array);
  
-console.log(numAlive);
   return numAlive;
 };

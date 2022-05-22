@@ -3,30 +3,21 @@ import { Gridboard } from "./modules/Gridboard";
 import { ControlPanel } from "./modules/ControlPanel";
 
 const gameController = (function () {
-
-  const array = [
-    [0, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 1, 0, 0],
-    [0, 0, 0, 0, 0],
-
-  ];
-  let gridBoard = new Gridboard("div", "gridboard");
-  let controlPanel = new ControlPanel("div", "control-panel")
+  let boardSize = 50;
+  let gridBoard = new Gridboard("div", "gridboard", { size: boardSize });
+  let controlPanel = new ControlPanel("div", "control-panel");
 
   let isPaused = false;
   let interval = 500;
 
   const initializeGame = () => {
     //initializes and draws board and initializes control panel
-    gridBoard.setBoardSize(10, 10);
+    gridBoard.setBoardSize(boardSize, boardSize);
     document.body.appendChild(gridBoard.render());
-    document.body.appendChild(controlPanel.render())
+    document.body.appendChild(controlPanel.render());
     controlPanel.initializeButtons();
     gridBoard.initializeClickListeners();
     gridBoard.drawBoard();
-
 
     //adds event lisenters to buttons
     const htmlStartButton = document.getElementById("start-button");
@@ -46,15 +37,17 @@ const gameController = (function () {
       htmlStartButton.innerText = "Start";
     }
 
-    setInterval(function () {
+    let turn = setInterval(function () {
       if (isPaused) {
         gridBoard.startGame();
+      } else {
+        clearInterval(turn);
       }
     }, interval);
   };
   const resetGame = () => {
+    isPaused = false;
     gridBoard.resetGame();
-
   };
   const stepGame = () => {
     gridBoard.stepGame();
@@ -63,8 +56,6 @@ const gameController = (function () {
   return {
     initializeGame: initializeGame,
   };
-
-
 })();
 
 gameController.initializeGame();

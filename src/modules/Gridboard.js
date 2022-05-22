@@ -2,15 +2,17 @@ import { Component } from "../Component";
 import { coordParseReverse } from "../utils/coordParseReverse";
 import { isAlive } from "../utils/isAlive";
 import { conwayLogicHandler } from "../utils/conwayLogicHandler";
-import { checkNeighbors, checkNumNeighbors } from "../utils/checkNeighbors";
+import { checkNumNeighbors } from "../utils/checkNeighbors";
 
 export class Gridboard extends Component {
-  constructor(type, id) {
+  constructor(type, id, props) {
     super(type, id);
     this.array = [];
+    this.props=props;
   }
 
   setBoardSize = (rows, cols) => {
+    console.log(this.props.size)
     for (let i = 0; i < rows; i++) {
       this.array.push([]);
 
@@ -35,7 +37,6 @@ export class Gridboard extends Component {
           cell.className = "clicked";
         }
         cell.id = `x${c + 1}y${i + 1}`;
-        cell.innerText = checkNumNeighbors(c, i, this.array, isAlive);
         gridContainer.appendChild(cell);
       }
     }
@@ -53,16 +54,14 @@ export class Gridboard extends Component {
   };
 
   startGame = () => {
-
     let newArray = [];
-    newArray.splice(0, newArray.length, ...this.array);
 
-console.log(newArray);
     for (let x = 0; x < this.array.length; x++) {
-      for (let y = 0; y < this.array.length; y++) {
+      newArray.push([]);
+      for (let y = 0; y < this.array[0].length; y++) {
         let numAlive = checkNumNeighbors(x, y, this.array);
         let newStatus = conwayLogicHandler(this.array[x][y], numAlive);
-        newArray[x][y] = newStatus;
+        newArray[x].push(newStatus);
       }
     }
 
@@ -72,7 +71,9 @@ console.log(newArray);
   };
 
   resetGame = () => {
-    this.setBoardSize(10, 10);
+    this.array = [];
+
+    this.setBoardSize(this.props.size, this.props.size);
     this.drawBoard();
   };
 
