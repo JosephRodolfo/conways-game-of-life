@@ -7,7 +7,7 @@
     "build": "webpack",
     "serve": "webpack serve",
     "start": "webpack serve --open",
-    "test": "jest"
+    "test": "jest --watch"
   },
   "jest": {
     "transform": {
