@@ -5,8 +5,8 @@ import { coordParseReverse } from "./utils/coordParseReverse";
 
 const gameController = (function () {
   let boardSize = 50;
-  let gridBoard = new Gridboard("div", "gridboard", { size: boardSize });
-  let controlPanel = new ControlPanel("div", "control-panel");
+  let gridBoard = new Gridboard("div",  {id:"gridboard"}, { size: boardSize });
+  let controlPanel = new ControlPanel("div", {id:"control-panel"});
   let interval = 500;
   let timer = {
     running: false,
@@ -14,7 +14,7 @@ const gameController = (function () {
     timeout: false,
     cb: function () {},
     start: function (cb, iv) {
-      var elm = this;
+      let elm = this;
       clearInterval(this.timeout);
       this.running = true;
       if (cb) this.cb = cb;
@@ -48,7 +48,7 @@ const gameController = (function () {
     viewController.drawBoard(gridBoard.returnArray());
     initializeClickListeners();
 
-    //adds event lisenters to buttons
+    //adds event lisenters to controlpanel
     const htmlStartButton = document.getElementById("start-button");
     htmlStartButton.addEventListener("click", startGame);
     const htmlResetButton = document.getElementById("reset-button");
@@ -59,6 +59,9 @@ const gameController = (function () {
     speedButton.addEventListener("click", speedUp);
     const slowButton = document.getElementById("slow-button");
     slowButton.addEventListener("click", slowDown);
+    const sizeSlider = document.getElementById("slider");
+  
+
   };
 
   const initializeClickListeners = () => {
@@ -75,18 +78,18 @@ const gameController = (function () {
   const startGame = () => {
     if (timer.running === false) {
       timer.start(() => {
-        viewController.toggleStartButtonDisplay(false);
+        viewController.toggleStartButtonDisplay("Stop");
         gridBoard.startGame();
         viewController.drawBoard(gridBoard.returnArray());
       }, interval);
     } else {
-      viewController.toggleStartButtonDisplay(true);
+      viewController.toggleStartButtonDisplay("Start");
       timer.stop();
     }
   };
   const resetGame = () => {
     interval = 500;
-    viewController.toggleStartButtonDisplay(true);
+    viewController.toggleStartButtonDisplay("Start");
     timer.stop();
     gridBoard.resetGame();
     viewController.drawBoard(gridBoard.returnArray());
@@ -117,11 +120,7 @@ const gameController = (function () {
 const viewController = (function () {
   const toggleStartButtonDisplay = (state) => {
     const htmlStartButton = document.getElementById("start-button");
-    if (state === true) {
-      htmlStartButton.innerText = "Start";
-    } else if (state === false) {
-      htmlStartButton.innerText = "Stop";
-    }
+      htmlStartButton.innerText = state;
   };
 
   const drawBoard = (array) => {
@@ -146,7 +145,7 @@ const viewController = (function () {
 
   return {
     drawBoard: drawBoard,
-    toggleStartButtonDisplay,
+    toggleStartButtonDisplay: toggleStartButtonDisplay,
   };
 })();
 gameController.initializeGame();

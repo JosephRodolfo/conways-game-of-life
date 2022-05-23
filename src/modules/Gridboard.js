@@ -1,4 +1,4 @@
-import { Component } from "../Component";
+import { Component } from "./Component";
 import { conwayLogicHandler } from "../utils/conwayLogicHandler";
 import { checkNumNeighbors } from "../utils/checkNeighbors";
 
@@ -10,7 +10,6 @@ export class Gridboard extends Component {
   }
 
   setBoardSize = (rows, cols) => {
-    console.log(this.props.size);
     for (let i = 0; i < rows; i++) {
       this.array.push([]);
 
