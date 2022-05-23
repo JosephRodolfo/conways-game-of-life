@@ -7,9 +7,35 @@ const gameController = (function () {
   let boardSize = 50;
   let gridBoard = new Gridboard("div", "gridboard", { size: boardSize });
   let controlPanel = new ControlPanel("div", "control-panel");
-
-  let isPaused = false;
   let interval = 500;
+  let timer = {
+    running: false,
+    iv: 500,
+    timeout: false,
+    cb: function () {},
+    start: function (cb, iv) {
+      var elm = this;
+      clearInterval(this.timeout);
+      this.running = true;
+      if (cb) this.cb = cb;
+      if (iv) this.iv = iv;
+      this.timeout = setTimeout(function () {
+        elm.execute(elm);
+      }, this.iv);
+    },
+    execute: function (e) {
+      if (!e.running) return false;
+      e.cb();
+      e.start();
+    },
+    stop: function () {
+      this.running = false;
+    },
+    set_interval: function (iv) {
+      clearInterval(this.timeout);
+      this.start(false, iv);
+    },
+  };
 
   const initializeGame = () => {
     //initializes and draws board and initializes control panel
@@ -36,43 +62,33 @@ const gameController = (function () {
   };
 
   const initializeClickListeners = () => {
-    let gridContainer=document.getElementById('gridboard');
+    let gridContainer = document.getElementById("gridboard");
     gridContainer.addEventListener("click", (e) => {
-      console.log('clicked')
       let id = e.target.id;
 
       let clickedCoord = coordParseReverse(id.toString());
-      console.log(clickedCoord)
-      gridBoard.addLiveCell(clickedCoord[0], clickedCoord[1])
-      viewController.drawBoard(gridBoard.returnArray())
+      gridBoard.addLiveCell(clickedCoord[0], clickedCoord[1]);
+      viewController.drawBoard(gridBoard.returnArray());
     });
   };
 
-
   const startGame = () => {
-    isPaused = !isPaused;
-    const htmlStartButton = document.getElementById("start-button");
-    if (isPaused) {
-      htmlStartButton.innerText = "Stop";
-    } else {
-      htmlStartButton.innerText = "Start";
-    }
-
-    let turn = setInterval(function () {
-      if (isPaused) {
-        gridBoard.startGame()
+    if (timer.running === false) {
+      timer.start(() => {
+        viewController.toggleStartButtonDisplay(false);
+        gridBoard.startGame();
         viewController.drawBoard(gridBoard.returnArray());
-      } else {
-        clearInterval(turn);
-      }
-    }, interval);
+      }, interval);
+    } else {
+      viewController.toggleStartButtonDisplay(true);
+      timer.stop();
+    }
   };
   const resetGame = () => {
     interval = 500;
-    const htmlStartButton = document.getElementById("start-button");
-    htmlStartButton.innerText = "Start";
-    isPaused = false;
-    gridBoard.resetGame()
+    viewController.toggleStartButtonDisplay(true);
+    timer.stop();
+    gridBoard.resetGame();
     viewController.drawBoard(gridBoard.returnArray());
   };
   const stepGame = () => {
@@ -81,6 +97,7 @@ const gameController = (function () {
   };
   const slowDown = () => {
     interval += 100;
+    timer.set_interval(interval);
   };
   const speedUp = () => {
     if (interval > 100) {
@@ -88,6 +105,8 @@ const gameController = (function () {
     } else {
       interval = 10;
     }
+
+    timer.set_interval(interval);
   };
 
   return {
@@ -96,6 +115,15 @@ const gameController = (function () {
 })();
 
 const viewController = (function () {
+  const toggleStartButtonDisplay = (state) => {
+    const htmlStartButton = document.getElementById("start-button");
+    if (state === true) {
+      htmlStartButton.innerText = "Start";
+    } else if (state === false) {
+      htmlStartButton.innerText = "Stop";
+    }
+  };
+
   const drawBoard = (array) => {
     let gridContainer = document.getElementById("gridboard");
     gridContainer.innerHTML = "";
@@ -118,6 +146,7 @@ const viewController = (function () {
 
   return {
     drawBoard: drawBoard,
+    toggleStartButtonDisplay,
   };
 })();
 gameController.initializeGame();
